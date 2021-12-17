@@ -1,3 +1,22 @@
+  insurance
+
+update Participated
+set Damageamount=25000
+where Regno='KA04Q2301' and Reportno=12;
+
+select count(p.name) from person p,
+accident a,participated pa where 
+p.driverid=pa.driverid and 
+a.reportno=pa.reportno and
+a.accdate like '2002-__-__';
+
+select count(*) from accident a,
+participated p,car c where
+c.regno=p.regno and 
+a.reportno=p.reportno and
+c.model='tata';
+ 
+ 2nd
 select C.Cname,count(CO.orderno),
 Avg(CO.Orderamount) from Customer C,corder CO
 where C.custno=CO.custno 
@@ -49,6 +68,7 @@ FROM accnt a,branch b,depositor d
 WHERE b.branchname=a.branchname AND
 a.accountno=d.accountno AND
 b.branchcity='Delhi'
+
 GROUP BY d.customername
 HAVING COUNT(distinct b.branchname)=(
 SELECT COUNT(branchname)
