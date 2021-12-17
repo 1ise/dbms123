@@ -1,0 +1,64 @@
+select C.Cname,count(CO.orderno),
+Avg(CO.Orderamount) from Customer C,corder CO
+where C.custno=CO.custno 
+group by C.Cname,CO.custno;
+
+select orderno,warehouseno 
+from shipment
+where warehouseno in 
+(select warehouseno 
+from warehouse
+where city='New York');
+
+
+select C.Courseno,
+T.ISBN,
+T.Booktitle from Course C,
+Book_adoption BA,
+Text T
+where C.Courseno=BA.Courseno and 
+BA.ISBN=T.ISBN and  
+C.Dept='CSE' and c.courseno in (
+select courseno from book_adoption
+group by Courseno having count(courseno)>=1);
+
+
+
+select  C.Dept
+from Course C
+WHERE c.courseno=any
+(Select b.courseno from book_adoption b
+where b.ISBN=any
+(Select t.ISBN from text t
+where publisher='GODMODE')
+);
+
+1st query
+
+SELECT customername
+FROM depositor d,accnt a
+WHERE d.accountno=a.accountno
+AND a.branchname='Jayanagar'
+GROUP BY d.customername
+HAVING COUNT(d.customername)>=1;
+
+2nd query
+
+SELECT d.customername
+FROM accnt a,branch b,depositor d
+WHERE b.branchname=a.branchname AND
+a.accountno=d.accountno AND
+b.branchcity='Delhi'
+GROUP BY d.customername
+HAVING COUNT(distinct b.branchname)=(
+SELECT COUNT(branchname)
+FROM branch
+WHERE branchcity='Delhi');
+
+3rd query
+
+DELETE FROM accnt WHERE 
+branchname IN(SELECT branchname FROM 
+branch WHERE branchcity='DELHI');
+
+
