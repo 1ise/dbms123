@@ -1,0 +1,110 @@
+create table branch( 
+branchname varchar(15), 
+branchcity varchar(15), 
+assets real,
+primary key (branchname)
+);
+
+ create table accnt( 
+accountno int(10), 
+branchname varchar(15), 
+balance real,
+primary key (accountno),
+foreign key (branchname) references 
+branch(branchname)
+);
+
+create table depositor( 
+customername varchar(15), 
+accountno int(10),
+primary key (customername,accountno),
+foreign key (accountno) references 
+accnt(accountno));
+
+create table customer( 
+customername varchar(15), 
+customerstreet varchar(15), 
+city varchar(15),
+primary key (customername));
+
+create table loan( loanno int(10), 
+branchname varchar(15), amount real,
+primary key (loanno),
+foreign key (branchname) references 
+branch(branchname));
+
+create table borrower(
+customername varchar(15),
+loanno int(10),
+primary key (customername,loanno),
+foreign key (customername) references
+customer(customername),
+foreign key (loanno) references
+loan(loanno));
+
+insert into branch values('Jayanagar','Bangalore','15000000');
+insert into branch values('Gandhinagar','Mysore','100000');
+insert into branch values('Nehrunagar','Pune','750000');
+insert into branch values('Rajajinagar','Delhi','200000');
+insert into branch values('Indiranagar','Chennai','600000');
+
+insert into accnt values('111','Jayanagar','25000');
+insert into accnt values('112','Gandhinagar','12000');
+insert into accnt values('113','Nehrunagar','5000');
+insert into accnt values('114','Rajajinagar','970');
+insert into accnt values('115','Indiranagar','250000');
+
+insert into customer values('Robert','Jayanagar','Bangalore');
+insert into customer values('Steave','Gandhinagar','Mysore');
+insert into customer values('Tony','Nehrunagar','Pune');
+insert into customer values('Bucky','Rajajinagar','Delhi');
+insert into customer values('Maxwell','Indiranagar','Chennai');
+
+
+insert into depositor values('Robert',111);
+insert into depositor values('Steave',112);
+insert into depositor values('Tony',113);
+insert into depositor values('Bucky',114);
+insert into depositor values('Maxwell',115);
+
+
+insert into loan values('1111','Jayanagar','250000');
+insert into loan values('1112','Gandhinagar','500000');
+insert into loan values('1113','Nehrunagar','600000');
+insert into loan values('1114','Rajajinagar','25000');
+insert into loan values('1115','Indiranagar','100000');
+
+insert into borrower values('Robert',1111);
+insert into borrower values('Steave',1112);
+insert into borrower values('Tony',1113);
+insert into borrower values('Bucky',1114);
+insert into borrower values('Maxwell',1115);
+
+1st query
+
+SELECT customername
+FROM depositor d,accnt a
+WHERE d.accountno=a.accountno
+AND a.branchname='Jayanagar'
+GROUP BY d.customername
+HAVING COUNT(d.customername)>=1;
+
+2nd query
+
+SELECT d.customername
+FROM accnt a,branch b,depositor d
+WHERE b.branchname=a.branchname AND
+a.accountno=d.accountno AND
+b.branchcity='Delhi'
+GROUP BY d.customername
+HAVING COUNT(distinct b.branchname)=(
+SELECT COUNT(branchname)
+FROM branch
+WHERE branchcity='Delhi');
+
+3rd query
+
+DELETE FROM accnt WHERE 
+branchname IN(SELECT branchname FROM 
+branch WHERE branchcity='DELHI');
+

@@ -1,0 +1,78 @@
+create table Person (
+ Driverid varchar(15),
+ Name varchar(15) not null,
+ Address varchar(20),
+ primary key (Driverid)); 
+
+create table Car(
+ Regno varchar(9),
+ Model varchar(15) not null,
+ Year integer not null,
+ primary key (Regno));
+
+create table Accident(
+ Reportno integer,
+ Accdate date not null,
+ Location varchar(15) not null,
+ primary key (Reportno));
+
+create table Owns(
+ Driverid varchar(15),
+ Regno varchar(9),
+ primary key (Driverid,Regno),
+ foreign key (Driverid) references Person(Driverid),
+ foreign key (Regno) references Car(Regno));
+
+ create table Participated(
+ Driverid varchar(15),
+ Regno varchar(9),
+ Reportno integer,
+ Damageamount integer,
+ primary key (Driverid,Regno,Reportno),
+ foreign key (Driverid) references Person(Driverid),
+ foreign key (Regno) references Car(Regno),
+ foreign key (Reportno) references Accident(Reportno));
+
+
+insert into Person values ('1111','Ramu','Jayanagar');
+insert into Person values ('2222','Manu','Rajajinagar');
+insert into Person values ('3333','Pandit','Indiranagar');
+insert into Person values ('4444','Gopal','BTMLayout');
+insert into Person values ('5555','Lalit','Whitefield');
+
+
+insert into Car values ('KA04Q2301','Maruthi', 2000);
+insert into Car values ('KA05P1000','Ford', 2002);
+insert into Car values ('KA03L1234','Honda', 1999);
+insert into Car values ('KA03L9999','Tata',2002);
+insert into Car values('KA01P4026','Toyota',2003);
+
+
+
+insert into Owns values ('1111','KA04Q2301');
+insert into Owns values ('2222','KA05P1000');
+insert into Owns values ('3333','KA03L1234');
+insert into Owns values ('4444','KA03L9999');
+insert into Owns values('5555','KA01P4026');
+
+
+
+insert into Accident values(12,'2001-02-01','Jayanagar');
+insert into Accident values(25,'2002-03-02','AvenueRoad');
+insert into Accident values (512,'2008-04-20','MGRoad');
+insert into Accident values (1024,'2005-05-02','BrigadeRoad');
+insert into Accident values (1000,'2003-03-23','RichmondCircle');
+
+
+
+insert into Participated values ('1111','KA04Q2301', 12, 2000);
+insert into Participated values ('2222','KA05P1000', 25, 15000);
+insert into Participated values ('3333','KA03L1234', 512, 15500);
+insert into Participated values ('4444','KA03L9999', 1024, 20000);
+insert into Participated values ('5555','KA01P4026', 1000, 5000);
+
+select * from Person;
+select * from Car;
+select * from Owns;
+select * from Accident;
+select * from participated;

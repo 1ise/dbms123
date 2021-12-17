@@ -1,0 +1,88 @@
+create table customer( Custno int(10),
+Cname varchar(15) , City varchar(15),
+primary key (Custno));
+
+create table corder( 
+Orderno int(10), 
+Odate date, 
+Custno int(10),
+OrderAmount int(10), 
+primary key (Orderno),
+foreign key (Custno) references Customer(Custno));
+
+create table item( 
+itemno int(10),
+unitprice int(10), 
+primary key (itemno));
+
+create table order_item
+( 
+orderno int(10),
+itemno int(10) , 
+quantity int(10) ,
+primary key (orderno,itemno),
+foreign key (orderno) references corder(orderno), 
+foreign key (itemno) references item(itemno) on delete cascade); 
+
+create table warehouse( 
+warehouseno int(10),
+city varchar(15) , 
+primary key (warehouseno));
+
+create table shipment( 
+orderno int(10), 
+warehouseno int(10), 
+shipdate date,
+primary key (orderno,warehouseno),
+foreign key (orderno) references corder(orderno),
+foreign key (warehouseno) references warehouse(warehouseno));
+
+insert into customer values(1234,'Robert','New York');
+insert into customer values(1985,'Tony','Los Angles');
+insert into customer values(5486,'Obama','Washington');
+insert into customer values(8548,'Steave','Wakanda');
+insert into customer values(4343,'Bucky','Alaska');
+
+insert into corder values(1,'2004-08-12',1234,90000);
+insert into corder values(2,'2015-12-05',1985,75000);
+insert into corder values(3,'1999-01-30',5486,50000);
+insert into corder values(4,'1984-06-25',8548,120000);
+insert into corder values(5,'2020-11-16',4343,65000);
+
+ insert into item values(101,550);
+ insert into item values(102,600);
+ insert into item values(103,1000);
+ insert into item values(104,1500);
+ insert into item values(105,2000);
+
+
+insert into order_item values (1,101,100);
+insert into order_item values (2,102,500);
+insert into order_item values (3,103,250);
+insert into order_item values (4,104,750);
+insert into order_item values (5,105,400);
+
+
+insert into warehouse values(11,'New York');
+insert into warehouse values(12,'Los Angles');
+insert into warehouse values(13,'Washington');
+insert into warehouse values(14,'Wakanda');
+insert into warehouse values(15,'Alaska');
+
+insert into shipment values(1,11,'2020-12-05');
+insert into shipment values(2,12,'2021-06-25');
+insert into shipment values(3,13,'2019-10-13');
+insert into shipment values(4,14,'2020-06-11');
+insert into shipment values(5,15,'2018-05-30');
+
+select C.Cname,count(CO.orderno),
+Avg(CO.Orderamount) from Customer C,corder CO
+where C.custno=CO.custno 
+group by C.Cname,CO.custno;
+
+select orderno,warehouseno 
+from shipment
+where warehouseno in 
+(select warehouseno 
+from warehouse
+where city='New York');
