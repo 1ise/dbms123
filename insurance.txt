@@ -74,21 +74,21 @@ insert into Participated values ('5555','KA01P4026', 1000, 5000);
 
 
 ***** 1st QUERY *****
-> update Participated
+ update Participated
  set Damageamount=25000
  where Regno='KA04Q2301' and Reportno=12;
  
  
  
  ***** 2ND QUERY *****
-SQL> insert into Person values ('6666','Bunty','Jayanagar');
+ insert into Person values ('6666','Bunty','Jayanagar');
 
 
 
 ***** 3RD QUERY *****
-SQL> select count(*) from Accident where Accdate like '__-___-02';
+select count(*) from Accident where Accdate like '__-___-02';
 
 
 ***** 4TH QUERY *****
-SQL> select count(*) from Car C,Participated P
+select count(*) from Car C,Participated P
  where C.Regno=P.Regno and C.Model='Ford';
