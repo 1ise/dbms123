@@ -3,23 +3,22 @@ Cname varchar(15) , City varchar(15),
 primary key (Custno));
 
 create table corder( 
-Orderno int(10), 
+Orderno int, 
 Odate date, 
-Custno int(10),
-OrderAmount int(10), 
+Custno int,OrderAmount int(10), 
 primary key (Orderno),
 foreign key (Custno) references Customer(Custno));
 
 create table item( 
-itemno int(10),
-unitprice int(10), 
+itemno int,
+unitprice int, 
 primary key (itemno));
 
 create table order_item
 ( 
-orderno int(10),
-itemno int(10) , 
-quantity int(10) ,
+orderno int,
+itemno int , 
+quantity int ,
 primary key (orderno,itemno),
 foreign key (orderno) references corder(orderno), 
 foreign key (itemno) references item(itemno) on delete cascade); 
