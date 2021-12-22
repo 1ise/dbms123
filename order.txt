@@ -86,3 +86,6 @@ where warehouseno in
 from warehouse
 where city='New York');
 
+delete from order_item where itemno=102;
+
+
