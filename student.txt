@@ -1,103 +1,104 @@
-create table Student
-( 
-Regno varchar(10),
-Name varchar(10) , 
-Major varchar(10), 
-Bdate date,
-primary key (Regno)
-);
-
-create table Course
-( 
-Courseno int(10),
-Cname varchar(10), 
-Dept varchar(10), 
-primary key (Courseno)
-);
-
-create table Enroll
-( Regno varchar(10), 
-Courseno int(10), 
-Sem int(10), 
-Marks int(10),
-primary key (Regno,Courseno),
-foreign key (Regno) references  Student(Regno), 
-foreign key (Courseno) references Course(Courseno)
-);
-
-create table Text
-( 
-ISBN int(10),
-Booktitle varchar(20), 
-Publisher varchar(20),
-Author varchar(15), 
-primary key (ISBN));
-
-create table Book_adoption
-( 
-Courseno int(10),
-Sem int(10), 
-ISBN int(10),
-primary key (Courseno,Sem),
-foreign key (Courseno) references Course(Courseno), 
-foreign key (ISBN) references Text(ISBN)
-);
-
-insert into Student values('4PS19IS001','TONY','ISE','2001-06-15');
-insert into Student values('4PS19EC002','ROBERT','ECE','2002-08-06');
-insert into Student values('4PS19CS003','STEAVE','CSE','2000-06-15');
-insert into Student values('4PS19EE004','BUCKY','EEE','2001-10-26');
-insert into Student values('4PS19IP005','FURY','IPE','2002-01-30');
-
-insert into course values(101,'DBMS','ISE');
-insert into course values(102,'DSC','ECE');
-insert into course values(103,'AI','CSE');
-insert into course values(104,'SIGNALS','EEE');
-insert into course values(105,'ANOLOG','IPE');
-
-insert into enroll values('4PS19IS001',101,5,100);Student
-insert into enroll values('4PS19EC002',102,3,60);
-insert into enroll values('4PS19CS003',103,5,80);
-insert into enroll values('4PS19EE004',104,3,75);
-insert into enroll values('4PS19IP005',105,5,90);
+create table student(
+regno int(20) primary key,
+name varchar(20),
+major varchar(20),
+bdate date);
 
 
-insert into text values(7722,'VB6','TJPUBLISHER','DR.HEIZENBERG');
-insert into text values(5588,'TBZ','ANALIZER','DR.ALBERT');
-insert into text values(6622,'ALK','CREATER','DR.ROCKSTER');
-insert into text values(1199,'EFG','GODMODE','DR.GOPALSWAMY');
-insert into text values(3344,'QWE','SKDREAMS','DR.NICK');
-
-insert into book_adoption values(101,5,7722);
-insert into book_adoption values(102,3,5588);
-insert into book_adoption values(103,5,6622);
-insert into book_adoption values(104,3,1199);
-insert into book_adoption values(105,5,3344);
-
-insert into text values(1234,'Elec.Circuits','Sapna','Giridhar');
-insert into book_adoption values(55,3,1234);
+create table course(
+cno int(10) primary key,
+cname varchar(20),
+dept varchar(20));
 
 
-select C.Courseno,
-T.ISBN,
-T.Booktitle from Course C,
-Book_adoption BA,
-Text T
-where C.Courseno=BA.Courseno and 
-BA.ISBN=T.ISBN and  
-C.Dept='CSE' and c.courseno in (
-select courseno from book_adoption
-group by Courseno having count(courseno)>=1);
+create table enrolled (
+regno int(20),
+marks int(3),
+cno int(10),
+sem int(5),
+foreign key(regno) references student(regno),
+foreign key(cno) references course(cno));
+
+
+create table text (
+book_isbn int(10) primary key,
+book_title varchar(20),
+publisher varchar(20),
+author varchar(20));
+
+
+
+create table bookadoption (
+cno int(10),
+sem int(5),
+book_isbn int(10),
+foreign key(cno) references course(cno),
+foreign key(book_isbn) references text(book_isbn));
 
 
 
 
-select  C.Dept
-from Course C
-WHERE c.courseno=any
-(Select b.courseno from book_adoption b
-where b.ISBN=any
-(Select t.ISBN from text t
-where publisher='GODMODE')
-);
+insert into student values('101','abc','cs','1988-08-26');
+insert into student values('102','def','ee','1988-10-08');
+insert into student values('103','ghi','is','1988-09-21');
+insert into student values('104','jkl','mech','1998-11-24');
+insert into student values('105','mno','ec','1995-12-17');
+insert into student values('106','pqr','mca','2001-09-13');
 
+
+insert into course values('11','ADA','cs');
+insert into course values('12','Electrical System','ee');
+insert into course values('13','Road safty','civil');
+insert into course values('14','Mechatronics','mech');
+insert into course values('15','RPA','is');
+insert into course values('16','ML','mca');
+
+
+
+insert into enrolled values(101,1,11,99);
+insert into enrolled values(102,2,12,90);
+insert into enrolled values(103,3,13,99);
+insert into enrolled values(104,4,14,97);
+insert into enrolled values(105,5,15,87);
+insert into enrolled values(106,6,16,67);
+
+
+
+insert into text values(1001,'network','pearson','peterson');
+insert into text values(1002,'dbms','pearson','navathe');
+insert into text values(1003,'cpp','cref','schild');
+insert into text values(1004,'sp','mcgraw','beck');
+insert into text values(1005,'os','mcgraw','donovan');
+insert into text values(1006,'dbms','mcgraw','raguram');
+
+
+insert into bookadoption values(11,1,1001);
+insert into bookadoption values(11,2,1002);
+insert into bookadoption values(11,3,1003);
+insert into bookadoption values(16,3,1004);
+insert into bookadoption values(16,4,1005);
+insert into bookadoption values(16,5,1005);
+
+
+
+3)))
+ insert into text values(2953,'dbms','penguin','elamsri');
+ insert into bookadoption values(11,5,2953);
+4)))
+select distinct(c.cno), t.book_isbn,t.book_title
+from course c,text t,bookadoption b
+where c.cno = b.cno and b.book_isbn = t.book_isbn and c.dept='CS'
+and c.cno in (select cno
+from bookadoption
+group by cno
+having count(cno)>=2)
+order by c.cname;
+
+
+5)) select c.dept
+ from course c
+ where c.cno = any (select b.cno
+ from bookadoption b
+ where b.book_isbn=any(select t.book_isbn
+ from text t
+ where publisher='pearson'));
