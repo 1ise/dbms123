@@ -53,8 +53,7 @@ create table Order_details(
  insert into Author values(4000,'Tennenbaum','London','UK');
 insert into Author values(5000,'Balaguruswamy','Chennai','India');
 
-
-> insert into publisher values(11,'Wiely','NewDelhi','India');
+ insert into publisher values(11,'Wiely','NewDelhi','India');
  insert into publisher values(22,'PHI','California','USA');
  insert into publisher values(33,'Sapna','Bangalore','India');
  insert into publisher values(44,'TMH','NewYork','USA');
