@@ -86,3 +86,4 @@ where warehouseno in
 (select warehouseno 
 from warehouse
 where city='New York');
+
