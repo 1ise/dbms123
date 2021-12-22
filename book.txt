@@ -1,112 +1,103 @@
-create table student(
-regno int(20) primary key,
-name varchar(20),
-major varchar(20),
-bdate date);
-
-
-
-create table course(
-cno int(10) primary key,
-cname varchar(20),
-dept varchar(20));
-
-
-
-create table enrolled (
-regno int(20),
-marks int(3),
-cno int(10),
-sem int(5),
-foreign key(regno) references student(regno),
-foreign key(cno) references course(cno));
-
-
-
-create table text (
-book_isbn int(10) primary key,
-book_title varchar(20),
-publisher varchar(20),
-author varchar(20));
-
-
-
-create table bookadoption (
-cno int(10),
-sem int(5),
-book_isbn int(10),
-foreign key(cno) references course(cno),
-foreign key(book_isbn) references text(book_isbn));
-
-
-insert into student values('101','abc','cs','1988-08-26');
-
-insert into student values('102','def','ee','1988-10-08');
-
-insert into student values('103','ghi','is','1988-09-21');
-
-insert into student values('104','jkl','mech','1998-11-24');
-insert into student values('105','mno','ec','1995-12-17');
-insert into student values('106','pqr','mca','2001-09-13');
-
-
-
-insert into course values('11','ADA','cs');
-insert into course values('12','Electrical System','ee');
-insert into course values('13','Road safty','civil');
-insert into course values('14','Mechatronics','mech');
-insert into course values('15','RPA','is');
-insert into course values('16','ML','mca');
-
-
-
-insert into enrolled values(101,1,11,99);
-insert into enrolled values(102,2,12,90);
-insert into enrolled values(103,3,13,99);
-insert into enrolled values(104,4,14,97);
-insert into enrolled values(105,5,15,87);
-insert into enrolled values(106,6,16,67);
-
-
-insert into text values(1001,'network','pearson','peterson');
-insert into text values(1002,'dbms','pearson','navathe');
-insert into text values(1003,'cpp','cref','schild');
-insert into text values(1004,'sp','mcgraw','beck');
-insert into text values(1005,'os','mcgraw','donovan');
-insert into text values(1006,'dbms','mcgraw','raguram');
-
-
-
-insert into bookadoption values(11,1,1001);
-insert into bookadoption values(11,2,1002);
-insert into bookadoption values(11,3,1003);
-insert into bookadoption values(16,3,1004);
-insert into bookadoption values(16,4,1005);
-insert into bookadoption values(16,5,1005);
-
-
-3)))
- insert into text values(2953,'dbms','penguin','elamsri');
- insert into bookadoption values(11,5,2953);
+ create table customer(
+ Custno integer,
+ Cname varchar(15) not null,
+ City varchar(15),
+ primary key (Custno));
  
  
+ create table corder(
+ Orderno integer,
+ Odate date not null,
+ Custno integer,
+ OrderAmount integer not null,
+ primary key (Orderno),
+ foreign key (Custno) references Customer(Custno));
+
+
+create table item(
+ itemno integer,
+ unitprice integer not null,
+ primary key (itemno));
+
+
+create table order_item(
+orderno integer,
+itemno integer,
+quantity integer,
+primary key (orderno,itemno),
+foreign key (orderno) references corder(orderno),
+foreign key (itemno) references item(itemno));
+
+create table warehouse(
+ warehouseno integer,
+ city varchar(15) not null,
+ primary key (warehouseno));
  
-4)))
-select distinct(c.cno), t.book_isbn,t.book_title
-from course c,text t,bookadoption b
-where c.cno = b.cno and b.book_isbn = t.book_isbn and c.dept='CS'
-and c.cno in (select cno
-from bookadoption
-group by cno
-having count(cno)>=2)
-order by c.cname;
+ create table shipment(
+ orderno integer,
+ warehouseno integer,
+ shipdate date,
+ primary key (orderno,warehouseno),
+ foreign key (orderno) references corder(orderno),
+ foreign key (warehouseno) references warehouse(warehouseno));
+ 
+ 
+ insert into customer values(1111,'Jack','Bangalore');
+ insert into customer values(2222,'Fred','New York');
+insert into customer values(3333,'George','Amsterdam');
+ insert into customer values(4444,'Kumar','Bangalore');
+ insert into customer values(5555,'Das','Bangalore');
+ 
+ 
+ insert into corder values(1,'2004-01-03',1111,10000);
+ insert into corder values(2,'2005-02-03',2222,25000);
+insert into corder values(3,'2004-03-04',3333,30000);
+ insert into corder values(4,'2004-09-09',4444,40000);
+insert into corder values(5,'2004-09-01',2222,50000);
+
+
+insert into item values(11,500);
+insert into item values(22,250);
+ insert into item values(33,100);
+insert into item values(44,50);
+ insert into item values(55,2);
+insert into item values(10,150);
+
+
+insert into order_item values (1,11,150);
+insert into order_item values (2,22,200);
+ insert into order_item values (3,33,300);
+insert into order_item values (4,44,400);
+insert into order_item values (5,55,500);
+insert into order_item values(2,10,500);
+
+
+insert into warehouse values(17,'Bangalore');
+insert into warehouse values(27,'Chennai');
+insert into warehouse values(37,'Pune');
+insert into warehouse values(47,'Coimbatore');
+insert into warehouse values(57,'Cochin');
+
+
+ insert into shipment values(1,17,'2005-01-09');
+ insert into shipment values(2,17,'2005-09-01');
+ insert into shipment values(3,27,'2005-02-03');
+ insert into shipment values(4,37,'2005-03-01');
+insert into shipment values(5,47,'2005-03-07');
 
 
 
-5)) select c.dept
- from course c
- where c.cno = any (select b.cno
- from bookadoption b
- where b.book_isbn=any(select t.book_isbn
- from text t
- where publisher='pearson'));
+***** 1ST QUERY *****
+select C.Cname,count(CO.orderno),Avg(CO.Orderamount)
+ from Customer C,corder CO
+ where C.custno=CO.custno
+ group by C.Cname,CO.custno;
+ 
+ 
+ ***** 2ND QUERY *****
+select orderno,warehouseno
+ from shipment
+ where warehouseno in
+ (select warehouseno
+ from warehouse
+ where city='Bangalore');
