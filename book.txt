@@ -1,103 +1,104 @@
- create table customer(
- Custno integer,
- Cname varchar(15) not null,
- City varchar(15),
- primary key (Custno));
+create table Author(
+ Authorid integer,
+ Aname varchar(15),
+ Acity varchar(15),
+ Acountry varchar(15),
+ primary key (Authorid));
  
  
- create table corder(
+  create table Publisher(
+ Publisherid integer,
+ Pname varchar(15),
+ Pcity varchar(15),
+ Pcountry varchar(15),
+ primary key (Publisherid));
+ 
+ 
+ create table Category(
+ Categoryid integer,
+ Description varchar(20),
+ primary key (Categoryid));
+
+
+create table Catalog(
+ Bookid integer,
+ Title varchar(20),
+ Authorid integer,
+ Publisherid integer,
+ Categoryid integer,
+ Year integer,
+ Price integer,
+ primary key (Bookid),
+ foreign key (Authorid) references Author(Authorid),
+ foreign key (Publisherid) references Publisher(Publisherid),
+ foreign key (Categoryid) references Category(Categoryid));
+ 
+ 
+ 
+  create table Order_details(
  Orderno integer,
- Odate date not null,
- Custno integer,
- OrderAmount integer not null,
- primary key (Orderno),
- foreign key (Custno) references Customer(Custno));
-
-
-create table item(
- itemno integer,
- unitprice integer not null,
- primary key (itemno));
-
-
-create table order_item(
-orderno integer,
-itemno integer,
-quantity integer,
-primary key (orderno,itemno),
-foreign key (orderno) references corder(orderno),
-foreign key (itemno) references item(itemno));
-
-create table warehouse(
- warehouseno integer,
- city varchar(15) not null,
- primary key (warehouseno));
- 
- create table shipment(
- orderno integer,
- warehouseno integer,
- shipdate date,
- primary key (orderno,warehouseno),
- foreign key (orderno) references corder(orderno),
- foreign key (warehouseno) references warehouse(warehouseno));
+ Bookid integer,
+ Quantity integer,
+ primary key (Orderno,Bookid),
+ foreign key (Bookid) references Catalog(Bookid));
  
  
- insert into customer values(1111,'Jack','Bangalore');
- insert into customer values(2222,'Fred','New York');
-insert into customer values(3333,'George','Amsterdam');
- insert into customer values(4444,'Kumar','Bangalore');
- insert into customer values(5555,'Das','Bangalore');
+ 
+ insert into Author values(1000,'Nandagopalan','Bangalore','India');
+insert into Author values(2000,'Tony','Haywood','USA');
+insert into Author values(3000,'Holzner','New York','USA');
+ insert into Author values(4000,'Tennenbaum','London','UK');
+ insert into Author values(5000,'Balaguruswamy','Chennai','India');
  
  
- insert into corder values(1,'2004-01-03',1111,10000);
- insert into corder values(2,'2005-02-03',2222,25000);
-insert into corder values(3,'2004-03-04',3333,30000);
- insert into corder values(4,'2004-09-09',4444,40000);
-insert into corder values(5,'2004-09-01',2222,50000);
-
-
-insert into item values(11,500);
-insert into item values(22,250);
- insert into item values(33,100);
-insert into item values(44,50);
- insert into item values(55,2);
-insert into item values(10,150);
-
-
-insert into order_item values (1,11,150);
-insert into order_item values (2,22,200);
- insert into order_item values (3,33,300);
-insert into order_item values (4,44,400);
-insert into order_item values (5,55,500);
-insert into order_item values(2,10,500);
-
-
-insert into warehouse values(17,'Bangalore');
-insert into warehouse values(27,'Chennai');
-insert into warehouse values(37,'Pune');
-insert into warehouse values(47,'Coimbatore');
-insert into warehouse values(57,'Cochin');
-
-
- insert into shipment values(1,17,'2005-01-09');
- insert into shipment values(2,17,'2005-09-01');
- insert into shipment values(3,27,'2005-02-03');
- insert into shipment values(4,37,'2005-03-01');
-insert into shipment values(5,47,'2005-03-07');
-
-
-
-***** 1ST QUERY *****
-select C.Cname,count(CO.orderno),Avg(CO.Orderamount)
- from Customer C,corder CO
- where C.custno=CO.custno
- group by C.Cname,CO.custno;
+ 
+ insert into publisher values(11,'Wiely','NewDelhi','India');
+insert into publisher values(22,'PHI','California','USA');
+insert into publisher values(33,'Sapna','Bangalore','India');
+ insert into publisher values(44,'TMH','NewYork','USA');
+ insert into publisher values(55,'Wrox','Texas','USA');
  
  
- ***** 2ND QUERY *****
-select orderno,warehouseno
- from shipment
- where warehouseno in
- (select warehouseno
- from warehouse
- where city='Bangalore');
+ 
+ insert into category values(1,'OS');
+ insert into category values(2,'Languages');
+insert into category values(3,'Hardware');
+ insert into category values(4,'Algorithms');
+ insert into category values(5,'Internet');
+ 
+ 
+ 
+  insert into catalog values(123,'DSC',1000,33,2,2000,185);
+ insert into catalog values(456,'Networks',4000,44,4,2002,365);
+insert into catalog values(789,'VB6',2000,11,2,2000,300);
+ insert into catalog values (213,'Frontpage2002',4000,44,5,2003,500);
+ insert into catalog values(879,'ADA',1000,33,4,2001,195);
+
+
+
+insert into order_details values(112,123,100);
+insert into order_details values(113,123,20);
+ insert into order_details values(114,213,50);
+insert into order_details values(115,789,500);
+ insert into order_details values(116,879,8);
+ 
+ 
+ 
+ 
+ ***** 1ST QUERY *****
+ select C.Authorid,A.Aname
+ from Catalog C,Author A
+ where A.Authorid=C.Authorid and C.Year>2000 and C.Price>(Select
+Avg(Price) from Catalog)
+ group by C.Authorid,A.Aname
+ having count(C.Authorid)>=2;
+
+
+
+**** 2ND QUERY *****
+create view salesdetails as(
+ Select OD.Bookid as Book#,C.Price as Cost,Sum(OD.quantity) as Qty,
+ sum(OD.quantity*C.price) as sales
+ from Order_details OD,Catalog C,Author A
+ where OD.Bookid=C.Bookid and C.Authorid=A.Authorid
+ group by OD.Bookid,C.Price);
