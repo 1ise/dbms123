@@ -70,9 +70,25 @@ insert into Participated values ('2222','KA05P1000', 25, 15000);
 insert into Participated values ('3333','KA03L1234', 512, 15500);
 insert into Participated values ('4444','KA03L9999', 1024, 20000);
 insert into Participated values ('5555','KA01P4026', 1000, 5000);
-
-select * from Person;
-select * from Car;
-select * from Owns;
-select * from Accident;
-select * from participated;
+
+
+
+***** 1st QUERY *****
+> update Participated
+ set Damageamount=25000
+ where Regno='KA04Q2301' and Reportno=12;
+ 
+ 
+ 
+ ***** 2ND QUERY *****
+SQL> insert into Person values ('6666','Bunty','Jayanagar');
+
+
+
+***** 3RD QUERY *****
+SQL> select count(*) from Accident where Accdate like '__-___-02';
+
+
+***** 4TH QUERY *****
+SQL> select count(*) from Car C,Participated P
+ where C.Regno=P.Regno and C.Model='Ford';
