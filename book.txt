@@ -1,110 +1,112 @@
-create table Author(
- Authorid integer,
- Aname varchar(15),
- Acity varchar(15),
- Acountry varchar(15),
- primary key (Authorid));
- 
- 
- 
-
-create table Publisher(
- Publisherid integer,
- Pname varchar(15),
- Pcity varchar(15),
- Pcountry varchar(15),
- primary key (Publisherid));
- 
- 
-  create table Category(
- Categoryid integer,
- Description varchar(20),
- primary key (Categoryid));
- 
- 
-create table Catalog(
- Bookid integer,
- Title varchar(20),
- Authorid integer,
- Publisherid integer,
- Categoryid integer,
- Year integer,
- Price integer,
- primary key (Bookid),
- foreign key (Authorid) references Author(Authorid),
- foreign key (Publisherid) references Publisher(Publisherid),
- foreign key (Categoryid) references Category(Categoryid));
- 
- 
-create table Order_details(
- Orderno integer,
- Bookid integer,
- Quantity integer,
- primary key (Orderno,Bookid),
- foreign key (Bookid) references Catalog(Bookid));
- 
- 
- 
- 
- 
- insert into Author values(1000,'Nandagopalan','Bangalore','India');
- insert into Author values(2000,'Tony','Haywood','USA');
- insert into Author values(3000,'Holzner','New York','USA');
- insert into Author values(4000,'Tennenbaum','London','UK');
-insert into Author values(5000,'Balaguruswamy','Chennai','India');
-
- insert into publisher values(11,'Wiely','NewDelhi','India');
- insert into publisher values(22,'PHI','California','USA');
- insert into publisher values(33,'Sapna','Bangalore','India');
- insert into publisher values(44,'TMH','NewYork','USA');
- insert into publisher values(55,'Wrox','Texas','USA');
- 
- 
- 
- insert into category values(1,'OS');
- insert into category values(2,'Languages');
- insert into category values(3,'Hardware');
- insert into category values(4,'Algorithms');
- insert into category values(5,'Internet');
-
-
- insert into catalog values(123,'DSC',1000,33,2,2000,185);
- insert into catalog values(456,'Networks',4000,44,4,2002,365);
-insert into catalog values(789,'VB6',2000,11,2,2000,300);
- insert into catalog values (213,'Frontpage2002',4000,44,5,2003,500);
- insert into catalog values(879,'ADA',1000,33,4,2001,195);
-
-
-insert into order_details values(112,123,100);
-insert into order_details values(113,123,20);
- insert into order_details values(114,213,50);
- insert into order_details values(115,789,500);
- insert into order_details values(116,879,8);
+create table student(
+regno int(20) primary key,
+name varchar(20),
+major varchar(20),
+bdate date);
 
 
 
-***** 1ST QUERY *****
- select C.Authorid,A.Aname
- from Catalog C,Author A
- where A.Authorid=C.Authorid and C.Year>2000 and C.Price>(Select
-Avg(Price) from Catalog)
- group by C.Authorid,A.Aname
- having count(C.Authorid)>=2;
- 
- 
- 
- ***** 2ND QUERY *****
- create view salesdetails as(
- Select OD.Bookid as Book#,C.Price as Cost,Sum(OD.quantity) as Qty,
- sum(OD.quantity*C.price) as sales
- from Order_details OD,Catalog C,Author A
- where OD.Bookid=C.Bookid and C.Authorid=A.Authorid
- group by OD.Bookid,C.Price);
+create table course(
+cno int(10) primary key,
+cname varchar(20),
+dept varchar(20));
 
 
 
-***** 3RD QUERY *****
-select A.Authorid,A.Aname,S.Book#,S.Sales
- from Author A,Catalog C,Salesdetails S
- where A.Authorid=C.Authorid and S.Book#=C.Bookid and sales=(
- select Max(Sales) from Salesdetails);
+create table enrolled (
+regno int(20),
+marks int(3),
+cno int(10),
+sem int(5),
+foreign key(regno) references student(regno),
+foreign key(cno) references course(cno));
+
+
+
+create table text (
+book_isbn int(10) primary key,
+book_title varchar(20),
+publisher varchar(20),
+author varchar(20));
+
+
+
+create table bookadoption (
+cno int(10),
+sem int(5),
+book_isbn int(10),
+foreign key(cno) references course(cno),
+foreign key(book_isbn) references text(book_isbn));
+
+
+insert into student values('101','abc','cs','1988-08-26');
+
+insert into student values('102','def','ee','1988-10-08');
+
+insert into student values('103','ghi','is','1988-09-21');
+
+insert into student values('104','jkl','mech','1998-11-24');
+insert into student values('105','mno','ec','1995-12-17');
+insert into student values('106','pqr','mca','2001-09-13');
+
+
+
+insert into course values('11','ADA','cs');
+insert into course values('12','Electrical System','ee');
+insert into course values('13','Road safty','civil');
+insert into course values('14','Mechatronics','mech');
+insert into course values('15','RPA','is');
+insert into course values('16','ML','mca');
+
+
+
+insert into enrolled values(101,1,11,99);
+insert into enrolled values(102,2,12,90);
+insert into enrolled values(103,3,13,99);
+insert into enrolled values(104,4,14,97);
+insert into enrolled values(105,5,15,87);
+insert into enrolled values(106,6,16,67);
+
+
+insert into text values(1001,'network','pearson','peterson');
+insert into text values(1002,'dbms','pearson','navathe');
+insert into text values(1003,'cpp','cref','schild');
+insert into text values(1004,'sp','mcgraw','beck');
+insert into text values(1005,'os','mcgraw','donovan');
+insert into text values(1006,'dbms','mcgraw','raguram');
+
+
+
+insert into bookadoption values(11,1,1001);
+insert into bookadoption values(11,2,1002);
+insert into bookadoption values(11,3,1003);
+insert into bookadoption values(16,3,1004);
+insert into bookadoption values(16,4,1005);
+insert into bookadoption values(16,5,1005);
+
+
+3)))
+ insert into text values(2953,'dbms','penguin','elamsri');
+ insert into bookadoption values(11,5,2953);
+ 
+ 
+ 
+4)))
+select distinct(c.cno), t.book_isbn,t.book_title
+from course c,text t,bookadoption b
+where c.cno = b.cno and b.book_isbn = t.book_isbn and c.dept='CS'
+and c.cno in (select cno
+from bookadoption
+group by cno
+having count(cno)>=2)
+order by c.cname;
+
+
+
+5)) select c.dept
+ from course c
+ where c.cno = any (select b.cno
+ from bookadoption b
+ where b.book_isbn=any(select t.book_isbn
+ from text t
+ where publisher='pearson'));
