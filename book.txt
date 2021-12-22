@@ -8,7 +8,7 @@ create table Author(
  
  
 
-SQL> create table Publisher(
+create table Publisher(
  Publisherid integer,
  Pname varchar(15),
  Pcity varchar(15),
@@ -16,13 +16,13 @@ SQL> create table Publisher(
  primary key (Publisherid));
  
  
- > create table Category(
+  create table Category(
  Categoryid integer,
  Description varchar(20),
  primary key (Categoryid));
  
  
-SQL> create table Catalog(
+create table Catalog(
  Bookid integer,
  Title varchar(20),
  Authorid integer,
@@ -36,7 +36,7 @@ SQL> create table Catalog(
  foreign key (Categoryid) references Category(Categoryid));
  
  
-SQL> create table Order_details(
+create table Order_details(
  Orderno integer,
  Bookid integer,
  Quantity integer,
@@ -48,44 +48,44 @@ SQL> create table Order_details(
  
  
  insert into Author values(1000,'Nandagopalan','Bangalore','India');
-SQL> insert into Author values(2000,'Tony','Haywood','USA');
-SQL> insert into Author values(3000,'Holzner','New York','USA');
-SQL> insert into Author values(4000,'Tennenbaum','London','UK');
-SQL> insert into Author values(5000,'Balaguruswamy','Chennai','India');
+ insert into Author values(2000,'Tony','Haywood','USA');
+ insert into Author values(3000,'Holzner','New York','USA');
+ insert into Author values(4000,'Tennenbaum','London','UK');
+insert into Author values(5000,'Balaguruswamy','Chennai','India');
 
 
 > insert into publisher values(11,'Wiely','NewDelhi','India');
-SQL> insert into publisher values(22,'PHI','California','USA');
-SQL> insert into publisher values(33,'Sapna','Bangalore','India');
-SQL> insert into publisher values(44,'TMH','NewYork','USA');
+ insert into publisher values(22,'PHI','California','USA');
+ insert into publisher values(33,'Sapna','Bangalore','India');
+ insert into publisher values(44,'TMH','NewYork','USA');
  insert into publisher values(55,'Wrox','Texas','USA');
  
  
  
- SQL> insert into category values(1,'OS');
-SQL> insert into category values(2,'Languages');
-SQL> insert into category values(3,'Hardware');
-SQL> insert into category values(4,'Algorithms');
-SQL> insert into category values(5,'Internet');
+ insert into category values(1,'OS');
+ insert into category values(2,'Languages');
+ insert into category values(3,'Hardware');
+ insert into category values(4,'Algorithms');
+ insert into category values(5,'Internet');
 
 
  insert into catalog values(123,'DSC',1000,33,2,2000,185);
-SQL> insert into catalog values(456,'Networks',4000,44,4,2002,365);
-SQL> insert into catalog values(789,'VB6',2000,11,2,2000,300);
-SQL> insert into catalog values (213,'Frontpage2002',4000,44,5,2003,500);
-SQL> insert into catalog values(879,'ADA',1000,33,4,2001,195);
+ insert into catalog values(456,'Networks',4000,44,4,2002,365);
+insert into catalog values(789,'VB6',2000,11,2,2000,300);
+ insert into catalog values (213,'Frontpage2002',4000,44,5,2003,500);
+ insert into catalog values(879,'ADA',1000,33,4,2001,195);
 
 
 insert into order_details values(112,123,100);
 insert into order_details values(113,123,20);
-SQL> insert into order_details values(114,213,50);
-SQL> insert into order_details values(115,789,500);
-SQL> insert into order_details values(116,879,8);
+ insert into order_details values(114,213,50);
+ insert into order_details values(115,789,500);
+ insert into order_details values(116,879,8);
 
 
 
 ***** 1ST QUERY *****
-SQL> select C.Authorid,A.Aname
+ select C.Authorid,A.Aname
  from Catalog C,Author A
  where A.Authorid=C.Authorid and C.Year>2000 and C.Price>(Select
 Avg(Price) from Catalog)
@@ -95,7 +95,7 @@ Avg(Price) from Catalog)
  
  
  ***** 2ND QUERY *****
-SQL> create view salesdetails as(
+ create view salesdetails as(
  Select OD.Bookid as Book#,C.Price as Cost,Sum(OD.quantity) as Qty,
  sum(OD.quantity*C.price) as sales
  from Order_details OD,Catalog C,Author A
