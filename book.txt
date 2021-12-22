@@ -81,3 +81,31 @@ insert into order_details values(113,123,20);
 SQL> insert into order_details values(114,213,50);
 SQL> insert into order_details values(115,789,500);
 SQL> insert into order_details values(116,879,8);
+
+
+
+***** 1ST QUERY *****
+SQL> select C.Authorid,A.Aname
+ from Catalog C,Author A
+ where A.Authorid=C.Authorid and C.Year>2000 and C.Price>(Select
+Avg(Price) from Catalog)
+ group by C.Authorid,A.Aname
+ having count(C.Authorid)>=2;
+ 
+ 
+ 
+ ***** 2ND QUERY *****
+SQL> create view salesdetails as(
+ Select OD.Bookid as Book#,C.Price as Cost,Sum(OD.quantity) as Qty,
+ sum(OD.quantity*C.price) as sales
+ from Order_details OD,Catalog C,Author A
+ where OD.Bookid=C.Bookid and C.Authorid=A.Authorid
+ group by OD.Bookid,C.Price);
+
+
+
+***** 3RD QUERY *****
+select A.Authorid,A.Aname,S.Book#,S.Sales
+ from Author A,Catalog C,Salesdetails S
+ where A.Authorid=C.Authorid and S.Book#=C.Bookid and sales=(
+ select Max(Sales) from Salesdetails);
