@@ -89,27 +89,22 @@ insert into order_details values(115,789,500);
  
  
  
+select a.aname from author a,catalog c,order_details o where
+a.authorid=c.authorid and
+c.bookid=o.bookid and
+o.quantity in(select max(quantity) from order_details);
+
+update catalog
+set price=price*1.10
+where publisherid in(
+select publisherid from publisher where
+pname='sapna');
  
- ***** 1ST QUERY *****
+ 
+
  select C.Authorid,A.Aname
  from Catalog C,Author A
  where A.Authorid=C.Authorid and C.Year>2000 and C.Price>(Select
 Avg(Price) from Catalog)
  group by C.Authorid,A.Aname
  having count(C.Authorid)>=2;
-
-
-
-**** 2ND QUERY *****
-create view salesdetails as(
- Select OD.Bookid as Book,C.Price as Cost,Sum(OD.quantity) as Qty,
- sum(OD.quantity*C.price) as sales
- from Order_details OD,Catalog C,Author A
- where OD.Bookid=C.Bookid and C.Authorid=A.Authorid
- group by OD.Bookid,C.Price);
-
-
-
-update catalog
- set price=price*1.10
- where publisherid=33;
