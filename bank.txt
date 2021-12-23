@@ -11,7 +11,7 @@ branchname varchar(15),
 balance real,
 primary key (accountno),
 foreign key (branchname) references 
-branch(branchname)
+branch(branchname) on delete cascade
 );
 
 create table depositor( 
@@ -19,7 +19,7 @@ customername varchar(15),
 accountno int(10),
 primary key (customername,accountno),
 foreign key (accountno) references 
-accnt(accountno));
+accnt(accountno) on delete cascade);
 
 create table customer( 
 customername varchar(15), 
@@ -31,16 +31,16 @@ create table loan( loanno int(10),
 branchname varchar(15), amount real,
 primary key (loanno),
 foreign key (branchname) references 
-branch(branchname));
+branch(branchname) on delete cascade);
 
 create table borrower(
 customername varchar(15),
 loanno int(10),
 primary key (customername,loanno),
 foreign key (customername) references
-customer(customername),
+customer(customername) on delete cascade,
 foreign key (loanno) references
-loan(loanno));
+loan(loanno) on delete cascade);
 
 insert into branch values('Jayanagar','Bangalore','15000000');
 insert into branch values('Gandhinagar','Mysore','100000');
