@@ -43,11 +43,6 @@ create table Catalog(
  foreign key (Bookid) references Catalog(Bookid));
  
  
- update catalog
- set price=price*1.10
- where publisherid=33;
- 
- 
  
  insert into Author values(1000,'Nandagopalan','Bangalore','India');
 insert into Author values(2000,'Tony','Haywood','USA');
