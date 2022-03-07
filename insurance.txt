@@ -41,19 +41,19 @@ insert into Person values ('4444','Gopal','BTMLayout');
 insert into Person values ('5555','Lalit','Whitefield');
 
 
-insert into Car values ('KA04Q2301','Maruthi', 2000);
-insert into Car values ('KA05P1000','Ford', 2002);
-insert into Car values ('KA03L1234','Honda', 1999);
-insert into Car values ('KA03L9999','Tata',2002);
-insert into Car values('KA01P4026','Toyota',2003);
+insert into Car values ('A1000','Maruthi', 2000);
+insert into Car values ('A1001','Ford', 2002);
+insert into Car values ('A1002','Honda', 1999);
+insert into Car values ('A1003','Tata',2002);
+insert into Car values('A1004','Toyota',2003);
 
 
 
-insert into Owns values ('1111','KA04Q2301');
-insert into Owns values ('2222','KA05P1000');
-insert into Owns values ('3333','KA03L1234');
-insert into Owns values ('4444','KA03L9999');
-insert into Owns values('5555','KA01P4026');
+insert into Owns values ('1111','A1000');
+insert into Owns values ('2222','A1001');
+insert into Owns values ('3333','A1002');
+insert into Owns values ('4444','A1003');
+insert into Owns values('5555','A1004');
 
 
 
@@ -65,18 +65,41 @@ insert into Accident values (1000,'2003-03-23','RichmondCircle');
 
 
 
-insert into Participated values ('1111','KA04Q2301', 12, 2000);
-insert into Participated values ('2222','KA05P1000', 25, 15000);
-insert into Participated values ('3333','KA03L1234', 512, 15500);
-insert into Participated values ('4444','KA03L9999', 1024, 20000);
-insert into Participated values ('5555','KA01P4026', 1000, 5000);
+insert into Participated values ('1111','A1000', 12, 2000);
+insert into Participated values ('2222','A1001', 25, 15000);
+insert into Participated values ('3333','A1002', 512, 15500);
+insert into Participated values ('4444','A1003', 1024, 20000);
+insert into Participated values ('5555','A1004', 1000, 5000);
 
 
+select * from Person;
+select * from Car;
+select * from Owns;
+select * from Accident;
+select * from participated;
+
+
+
+update Participated
+set Damageamount=25000
+where Regno='A1000' and Reportno=12;
+
+select count(p.name) from person p,
+accident a,participated pa where 
+p.driverid=pa.driverid and 
+a.reportno=pa.reportno and
+a.accdate like '2002-__-__';
+
+select count(*) from accident a,
+participated p,car c where
+c.regno=p.regno and 
+a.reportno=p.reportno and
+c.model='tata';
 
 ***** 1st QUERY *****
  update Participated
  set Damageamount=25000
- where Regno='KA04Q2301' and Reportno=12;
+ where Regno='A1000' and Reportno=12;
  
  
  
